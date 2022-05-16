@@ -11,7 +11,7 @@ print(st.title("Titanik faciəsindən sağ çıxa bilərdinizmi?"))
 @st.cache
 def model():
     # Data oxunur
-    data = pd.read_csv(r"C:\Users\Dell\Desktop\train.csv")
+    data = pd.read_csv("train.csv")
 
     le = LabelEncoder()
 
