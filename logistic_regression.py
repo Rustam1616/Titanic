@@ -6,11 +6,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
 # Data yuklenir
-print(st.title("Titanik faciəsindən sağ çıxa bilərdinizmi?"))
+print(st.title("How likely were you to survive the Titanic?"))
 
 @st.cache
 def model():
-    # Data oxunur
+    # Data readed
     data = pd.read_csv("train.csv")
 
     le = LabelEncoder()
@@ -45,28 +45,30 @@ def start(model):
     global age
     global sibling
 
-    if p_class == "Birinci sinif":
+    if p_class == "First class":
         p_class = 1
-    elif p_class == "İkinci sinif":
+    elif p_class == "Second class":
         p_class = 2
     else:
         p_class = 3
-    # Dataframe hazırlayırıq
+    # Dataframe preparation
     input_data = {'Pclass': p_class, "Sex": gender, "Age": age, "SibSp": sibling}
     df = pd.DataFrame(data=input_data, index=[0])
     prediction = predict_data(model, df)
     predict_probability = model.predict_proba(df)
     if prediction[0] == 1:
-        st.subheader('{}% ehtimalla sağ qalardınız.'.format(round(predict_probability[0][1] * 100, 3)))
+        st.subheader('Would be survived with {}% probability.'.format(round(predict_probability[0][1] * 100, 3)))
+        st.image("https://www.denofgeek.com/wp-content/uploads/2015/10/raise-main.jpg?resize=620%2C349")
     else:
-        st.subheader('{}% ehtimalla ölərdiniz'.format(round(predict_probability[0][0] * 100, 3)))
+        st.subheader('Would be died with {}% probability'.format(round(predict_probability[0][0] * 100, 3)))
+        st.image("https://media.nationalgeographic.org/assets/photos/000/273/27302.jpg")
 
 # %%
-#####Streamlit kitabxanasından istifadə edilir.
-age = st.slider("Yaşınız", 1, 100, 1)
-sibling = st.slider("Sizinlə birlikdə olan ailə üzvlərinizin sayı", 1, 10, 1)
-gender = st.selectbox("Cins", options=["Kişi", "Qadın"])
-p_class = st.selectbox("Sərnişin sinfi", options=['Birinci sinif', 'İkinci sinif', 'Üçüncü sinif'])
-gender = 1 if gender == "Kişi" else 0
-if st.button("Hesabla"):
+#####stramlit library was used.
+age = st.slider("Your age", 1, 100, 1)
+sibling = st.slider("Number of family members travelling with you", 1, 10, 1)
+gender = st.selectbox("Sex", options=["Male", "Female"])
+p_class = st.selectbox("Passenger class", options=['First class', 'Second class', 'Third class'])
+gender = 1 if gender == "Male" else 0
+if st.button("Check"):
     start(model)
